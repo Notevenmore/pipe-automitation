@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import Layout from "@/layouts/layout";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home({}) {
+  const router = useRouter();
   return (
     <Layout title="Start Page">
       <div className="w-screen bg-gradient-to-r from-[#D9D9D9] to-white flex items-center justify-center h-[calc(100vh-10.5vh)]">
@@ -10,7 +10,7 @@ export default function Home({}) {
           <h1 className="text-[#BBE0FF] font-black text-5xl">Start Optimizing Your Pipeline System Now.</h1>
           <h6 className="font-bold text-2xl">Optimal Calculation For a Better System</h6>
           <div className="flex gap-6">
-            <button className="bg-[#2194f2] flex justify-evenly items-center w-[171px] h-[52px] rounded-xl font-bold">
+            <button className="bg-[#2194f2] flex justify-evenly items-center w-[171px] h-[52px] rounded-xl font-bold" onClick={() => router.push("/input-data")}>
               {"Start Now"}
               <img src="./icons/arrow.svg" />
             </button>
