@@ -1,4 +1,4 @@
-![Screenshot from 2024-10-27 02-34-35](https://github.com/user-attachments/assets/fd76ece9-1854-4289-9094-9002caf91239)# Website Automisasi Pipa
+# Website Automisasi Pipa
 
 **Website Automisasi Pipa** adalah platform yang dibangun menggunakan **Next.js**, dirancang untuk mengoptimalkan proses distribusi gas melalui sistem pipa. Aplikasi ini bertujuan untuk memberikan solusi cerdas dalam pengelolaan distribusi gas dengan mempertimbangkan berbagai parameter teknis untuk mencapai efisiensi maksimum.
 
