@@ -1,2 +1,2 @@
-const algorithm = ["Algorithm A", "Algorithm B", "Algorithm C", "Algorithm E", "Algorithm F", "Algorithm G"];
+const algorithm = ["de_best_1", "de_best_2", "de_current_best_1"];
 export default algorithm;
