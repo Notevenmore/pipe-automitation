@@ -10,8 +10,6 @@ export default function SelectAlgorithm() {
   const [index, setIndex] = useState<number>(-1);
   const [error, setError] = useState<string>("");
   const [isError, setIsError] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
-  const [isLoad, setIsLoad] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     if(index === -1) {
@@ -36,7 +34,9 @@ export default function SelectAlgorithm() {
           requested: selectedAlgorithm
         }
 
-        const response = await api.post('/automated', data, {
+        console.log(process.env.BACKEND_URL);
+
+        const response = await api.post('', data, {
           headers: {
             'Content-Type': 'application/json'
           }

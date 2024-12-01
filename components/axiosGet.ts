@@ -2,7 +2,7 @@ import axios from "axios";
 import nProgress from "nprogress";
 
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8000',
+    baseURL: process.env.BACKEND_URL,
     timeout: 0
 });
 

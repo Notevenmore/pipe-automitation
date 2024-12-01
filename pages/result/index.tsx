@@ -9,6 +9,8 @@ import Simulation from "@/components/simulation";
 import TableComponents from "@/components/table";
 import { CompressorData, ResultData } from "@/interface/interface";
 import algorithm from "@/algorithm-list";
+import XLSX from 'xlsx-js-style';
+
 
 export default function Result() {
   const router = useRouter();
@@ -25,7 +27,7 @@ export default function Result() {
       const response = algorithm.map((value) => {
         const localData = localStorage.getItem(value);
         if(localData) {
-          const localDataParsed = JSON.parse(localData).data;
+          const localDataParsed = JSON.parse(localData);
           
           const resultData = result;
           setResult({...resultData, [value]: localDataParsed.best_all});
@@ -57,6 +59,43 @@ export default function Result() {
     };
     localStorage.setItem('detail', JSON.stringify(dataSended));
     router.push('/detail');
+  }
+
+  const exportData = () => {
+    const wb = XLSX.utils.book_new();
+    const header = Object.keys(result[data.find((value: any) => value.efisiensi === 1).algorithm_name][0]).map((key) => ({
+      v: key,
+      t: "s",
+      s: {
+        font: {
+          name: "Times New Roman", sz: 14,
+          bold: true,
+          color: "white"
+        },
+        fill: { bgColor: "black" },
+        alignment: { 
+          vertical: "center",
+          horizontal: "center",
+        }
+       }
+    }));
+    const value = result[data.find((val: any) => val.efisiensi === 1).algorithm_name].map((val: any) => {
+      return Object.values(val).map((v) => ({
+        v: v,
+        t: "n",
+        s: { 
+          font: { name: "Times New Roman", sz: 12 },
+          alignment: { 
+            vertical: "center",
+            horizontal: "center",
+          }
+        }
+      }));
+    });
+    const ws = XLSX.utils.aoa_to_sheet([header, ...value]);
+    XLSX.utils.book_append_sheet(wb, ws, "sheet1");
+    
+    XLSX.writeFile(wb, `${data.find((val: any) => val.efisiensi === 1).algorithm_name.split("_").map((letter: string) => letter.charAt(0).toUpperCase() + letter.slice(1)).join(" ")}.xlsx`);
   }
 
   if(!isLoading)
@@ -112,7 +151,7 @@ export default function Result() {
             </div>
             <TableComponents data={data} />
             <div className="bg-white text-[#0D141C] font-bold text-sm px-[16px] py-[9.5px] rounded-lg cursor-pointer" onClick={redirectToDetail}>View Detail Info</div>
-            <div className="self-end bg-[#1A80E5] text-[#F7FAFC] font-bold text-sm px-[16px] py-[9.5px] rounded-lg">Export Data</div>
+            <div className="self-end bg-[#1A80E5] text-[#F7FAFC] font-bold text-sm px-[16px] py-[9.5px] rounded-lg" onClick={exportData}>Export Data</div>
         </div>
       </div>
     </Layout>

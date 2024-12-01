@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 import Layout from "@/layouts/layout";
 import { useRouter } from "next/navigation";
 
