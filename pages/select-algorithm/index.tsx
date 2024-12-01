@@ -3,7 +3,7 @@ import { useState } from "react";
 import Layout from "@/layouts/layout";
 import { useRouter } from "next/navigation";
 import algorithm from "@/algorithm-list";
-// import axios from "axios";
+import api from "@/components/axiosGet";
 
 export default function SelectAlgorithm() {
   const router = useRouter();
@@ -20,62 +20,34 @@ export default function SelectAlgorithm() {
     } else{ 
       setError(""); 
       setIsError(false);
+      let selectedAlgorithm;
+      if(index === algorithm.length) selectedAlgorithm = "All";
+      else selectedAlgorithm = algorithm[index];
+  
+      const sendData = localStorage.getItem("data");
+      if(sendData) {
+        const datas = JSON.parse(sendData);
+        const data = {
+          ps: datas.pipe_initial_pressure,
+          ps1: datas.required_output_pressures_p1,
+          ps2: datas.required_output_pressures_p2,
+          length_b1_b2: datas.distance_to_consumer_l1,
+          length_b1_b3: datas.distance_to_consumer_l2,
+          requested: selectedAlgorithm
+        }
+
+        const response = await api.post('/automated', data, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        localStorage.setItem(selectedAlgorithm, JSON.stringify(response.data));
+        router.push('result');
+      }
     }
-    // let selectedAlgorithm;
-    // if(index === algorithm.length) selectedAlgorithm = "All";
-    // else selectedAlgorithm = algorithm[index];
-
-    // const sendData = localStorage.getItem("data");
-    // if(sendData) {
-    //   const datas = JSON.parse(sendData);
-    //   const formData = new FormData();
-    //   const data = {
-    //     ps: datas.pipe_initial_pressure,
-    //     ps1: datas.required_output_pressures_p1,
-    //     ps2: datas.required_output_pressures_p2,
-    //     length_b1_b2: datas.distance_to_consumer_l1,
-    //     length_b1_b3: datas.distance_to_consumer_l2,
-    //     requested: selectedAlgorithm
-    //   }
-    //   formData.append('ps', datas.pipe_initial_pressure);
-    //   formData.append('ps1', datas.required_output_pressures_p1);
-    //   formData.append('ps2', datas.required_output_pressures_p2);
-    //   formData.append('length_b1_b2', datas.distance_to_consumer_l1);
-    //   formData.append('length_b1_b3', datas.distance_to_consumer_l2);
-    //   formData.append('requested', selectedAlgorithm);
-
-    //   await axios.post("http://127.0.0.1:8000/automated", data, {
-    //     onUploadProgress: () => {
-    //       setIsLoad(true);
-    //     }, 
-    //     onDownloadProgress: (progressEvent) => {
-    //       const percentComplete = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
-    //       setProgress(percentComplete);
-    //     }
-    //   }).then((response) => {
-    //     localStorage.setItem('result', response.data);
-    //     localStorage.setItem("algorithm", selectedAlgorithm);
-    //     setIsLoad(false);
-    //     router.push("/result");
-    //   }).catch((error) => {
-    //     console.log("Error data: ",error);
-    //   });
-    // }
-    router.push('result');
   };
-  if(isLoad) return (
-    <Layout title="Input Data">
-      <div className="w-screen h-[calc(100vh-20vh)] flex-col flex items-center justify-center">
-        <div className="p-3 w-[80%] border-black border-[1px]">
-          <progress value={progress} max="100" className="w-full">
-            {progress}%
-          </progress>
-          <h1 className="text-black text-center font-extrabold text-2xl font-sans">Working...</h1>
-        </div>
-      </div>
-    </Layout>
-  )
-else return (
+  return (
     <Layout title="Input Data">
       <div className="bg-[#F7FAFC] flex items-center justify-center py-[40px] text-black">
         <div className="flex flex-col gap-4 items-start justify-start w-[72rem]">

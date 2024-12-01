@@ -13,7 +13,7 @@ export default function Simulation ({start, end, initCompressorBranch, initPipeB
               <p>Pd:  {value.pd} MMCFD</p>
               <p>Ps:  {value.ps} PSI</p>
               <p>d: {value.d} cm</p>
-              <p>Flow Rate: {value.q}</p>
+              <p>Flow Rate: {value.Q}</p>
             </div>
           }
           {

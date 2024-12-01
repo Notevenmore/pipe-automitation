@@ -25,3 +25,19 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Ubah warna progress bar */
+#nprogress .bar {
+  background: #00c8ff; /* Hijau */
+}
+
+/* Ubah warna latar belakang */
+#nprogress .peg {
+  box-shadow: 0 0 10px #4caf50, 0 0 5px #00c8ff;
+}
+
+/* Tinggi progress bar */
+#nprogress .bar {
+  height: 3px;
+}
+
