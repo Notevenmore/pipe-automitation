@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import Layout from "@/layouts/layout";
 import { useRouter } from "next/navigation";
 import algorithm from "@/algorithm-list";
-import axios from "axios";
+// import axios from "axios";
 
 export default function SelectAlgorithm() {
   const router = useRouter();
@@ -20,46 +21,47 @@ export default function SelectAlgorithm() {
       setError(""); 
       setIsError(false);
     }
-    let selectedAlgorithm;
-    if(index === algorithm.length) selectedAlgorithm = "All";
-    else selectedAlgorithm = algorithm[index];
+    // let selectedAlgorithm;
+    // if(index === algorithm.length) selectedAlgorithm = "All";
+    // else selectedAlgorithm = algorithm[index];
 
-    const sendData = localStorage.getItem("data");
-    if(sendData) {
-      const datas = JSON.parse(sendData);
-      const formData = new FormData();
-      const data = {
-        ps: datas.pipe_initial_pressure,
-        ps1: datas.required_output_pressures_p1,
-        ps2: datas.required_output_pressures_p2,
-        length_b1_b2: datas.distance_to_consumer_l1,
-        length_b1_b3: datas.distance_to_consumer_l2,
-        requested: selectedAlgorithm
-      }
-      formData.append('ps', datas.pipe_initial_pressure);
-      formData.append('ps1', datas.required_output_pressures_p1);
-      formData.append('ps2', datas.required_output_pressures_p2);
-      formData.append('length_b1_b2', datas.distance_to_consumer_l1);
-      formData.append('length_b1_b3', datas.distance_to_consumer_l2);
-      formData.append('requested', selectedAlgorithm);
+    // const sendData = localStorage.getItem("data");
+    // if(sendData) {
+    //   const datas = JSON.parse(sendData);
+    //   const formData = new FormData();
+    //   const data = {
+    //     ps: datas.pipe_initial_pressure,
+    //     ps1: datas.required_output_pressures_p1,
+    //     ps2: datas.required_output_pressures_p2,
+    //     length_b1_b2: datas.distance_to_consumer_l1,
+    //     length_b1_b3: datas.distance_to_consumer_l2,
+    //     requested: selectedAlgorithm
+    //   }
+    //   formData.append('ps', datas.pipe_initial_pressure);
+    //   formData.append('ps1', datas.required_output_pressures_p1);
+    //   formData.append('ps2', datas.required_output_pressures_p2);
+    //   formData.append('length_b1_b2', datas.distance_to_consumer_l1);
+    //   formData.append('length_b1_b3', datas.distance_to_consumer_l2);
+    //   formData.append('requested', selectedAlgorithm);
 
-      await axios.post("http://127.0.0.1:8000/automated", data, {
-        onUploadProgress: () => {
-          setIsLoad(true);
-        }, 
-        onDownloadProgress: (progressEvent) => {
-          const percentComplete = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
-          setProgress(percentComplete);
-        }
-      }).then((response) => {
-        localStorage.setItem('result', response.data);
-        localStorage.setItem("algorithm", selectedAlgorithm);
-        setIsLoad(false);
-        router.push("/result");
-      }).catch((error) => {
-        console.log("Error data: ",error);
-      });
-    }
+    //   await axios.post("http://127.0.0.1:8000/automated", data, {
+    //     onUploadProgress: () => {
+    //       setIsLoad(true);
+    //     }, 
+    //     onDownloadProgress: (progressEvent) => {
+    //       const percentComplete = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
+    //       setProgress(percentComplete);
+    //     }
+    //   }).then((response) => {
+    //     localStorage.setItem('result', response.data);
+    //     localStorage.setItem("algorithm", selectedAlgorithm);
+    //     setIsLoad(false);
+    //     router.push("/result");
+    //   }).catch((error) => {
+    //     console.log("Error data: ",error);
+    //   });
+    // }
+    router.push('result');
   };
   if(isLoad) return (
     <Layout title="Input Data">

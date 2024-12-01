@@ -1,74 +1,107 @@
-// import { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState, useEffect } from "react";
 import Layout from "@/layouts/layout";
 import { useRouter } from "next/navigation";
 
+interface Result {
+  ps: number;
+  pd: number;
+  l: number;
+  d: number;
+}
+
+function Simulation ({start, end, initCompressorBranch, initPipeBranch, isUp, result, compressor, setHoverSelectedIndex, hoverSelectedIndex}: any) {
+  return result.slice(start, end).map((value: any, i: number) => {
+    return (
+      <div key={i} className="relative">
+        {
+          hoverSelectedIndex[i + start] && 
+          <div className="absolute -top-[250px] -left-36 border-black border-2 p-4 rounded-xl w-[500px]">
+            <p>Compressor:  {compressor[i + start]}</p>
+            <p>Pd:  {value[0]} MMCFD</p>
+            <p>Ps:  {value[1]} PSI</p>
+            <p>l: {value[2]} miles</p>
+            <p>d: {value[3]} cm</p>
+          </div>
+        }
+          <div 
+            onMouseEnter={() => {
+              const selectedIndex = [...hoverSelectedIndex];
+              selectedIndex[i + start] = true;
+              setHoverSelectedIndex(selectedIndex);
+            }}
+            onMouseLeave={() => {
+              const selectedIndex = [...hoverSelectedIndex];
+              selectedIndex[i + start] = false;
+              setHoverSelectedIndex(selectedIndex);
+            }}
+            className={`flex items-center justify-center border-black border-2 rounded-full absolute ${isUp && "-top-[45px]"}`} 
+            style={{width: "50px", height: "50px", left: `${i === 0 ? initCompressorBranch : initCompressorBranch + result.slice(start, i + start).map((val: any) => val[2]).reduce((acc: any, val: any) => { acc += val; return acc }, 0) + i * 50}px` }}
+          >{i+start + 1}</div>
+          {i !== (end - start - 1) && <div className={`h-[1px] flex items-center justify-center border-black border-[1px] absolute ${isUp ? "-top-[20px]" : "top-[25px]"}`} style={{width: `${value[2]}px`, left: `${i === 0 ? initPipeBranch : initPipeBranch + result.slice(start, i + start).map((val: any) => val[2]).reduce((acc: any, val: any) => { acc += val; return acc }, 0) + i * 50}px`}}></div>}
+      </div>
+    )
+  })
+}
+
+
 export default function Result() {
   const router = useRouter();
-//   Best vector setiap branch:
-// 	|     Pd     |     Ps     |     L       |      D      |        Q         |
-// Pipe 1: [866.17072247 359.64182903  23.28914832   5.04167671]  10.628911996211237
-// Pipe 2: [649.42257004 648.3284785   59.30127763   6.20726611]  0.5546380079710617
-// Pipe 3: [710.15705292 347.4565629   42.78500573   4.27376708]  3.967091440127541
-// ---------------------------------
-// Pipe 4: [612.57274099 490.46279894   9.10522381  12.50617057]  89.27051391037564
-// Pipe 5: [832.56880253 711.03777174   3.92868126   5.63631739]  19.14966435032629
-// Pipe 6: [978.04111518 465.10651326  29.47335399   5.37137605]  12.214749786450017
-// Pipe 7: [667.53935387 599.68066541   7.28028725  11.98230921]  71.16733467642806
-// ---------------------------------
-// Pipe 8: [892.18724877 381.9871365   31.76468867   6.09475296]  15.44353968745509
-// Pipe 9: [642.59037861 642.43355544  23.42015038   7.01534597]  0.46080262577082753
-// Pipe 10: [701.63125557 662.08092853  10.09980859   6.12990272]  8.010768910469618
-// Pipe 11: [710.85347754 300.25498028   8.9974909   11.29699244]  120.21700321752029
+  const [hoverSelectedIndex, setHoverSelectedIndex] = useState([false, false, false, false, false, false, false, false, false, false, false]);
+  // format pd, ps, l, d, q
+  const [result, setResult] = useState([
+     [701.25133261, 471.00881617,  21.52499159, 4, 10.628911996211237],
+    [971.80988514, 476.26989277,  43.71686891, 13.17587302, 0.5546380079710617],
+    [635.69332774, 568.92785319, 60.13303615, 4.07253664, 3.967091440127541],
+    [723.8564513,  626.48684081, 20.69870245, 4.08411964, 89.27051391037564],
+    [769.47972613, 609.95056145, 6.20970002, 18, 19.14966435032629],
+    [760.93590527, 614.84791113, 12.45646561, 7.11428831, 12.214749786450017],
+    [640.44483082, 600.18795116, 10.17975685, 13.6550791, 71.16733467642806],
+    [844.06634243, 580.5532022, 37.18612387, 5.42823829, 15.44353968745509],
+    [739.4223457, 342.03999175, 7.81809052, 1024.34848526, 0.46080262577082753],
+    [997.73933601, 376.8800504, 13.78066334, 8.86298738, 8.010768910469618],
+    [979.5699358, 299.88804521, 15.55203021, 10.84434546, 120.21700321752029],
+  ]);
+  const [compressor, setCompressor] = useState([
+    1.7323414449356593,
+    1.8057481572487366,
+    1.0953661245330497,
+    1.7630196300651513,
+    1.6975167216224112,
+    1.3755121795986622,
+    1.4352397458162511,
+    1.4877705756238886,
+    1.682230413567795,
+    1.0921460275918262,
+  ]);
 // ---------------------------------
 // Ps = 600 terpenuhi pada pipe ke: 7
 // Ps = 300 terpenuhi pada pipe ke: 11
 // ---------------------------------
 // F(x) = 13884696.103044141
-// Compressor Ratio
-// Compressor 1 : 1.7323414449356593
-// Compressor 2 : 1.8057481572487366
-// Compressor 3 : 1.0953661245330497
-// Compressor 4 : 1.7630196300651513
-// Compressor 5 : 1.6975167216224112
-// Compressor 6 : 1.3755121795986622
-// Compressor 7 : 1.4352397458162511
-// Compressor 8 : 1.4877705756238886
-// Compressor 9 : 1.682230413567795
-// Compressor 10 : 1.0921460275918262
+
   return (
     <Layout title="Input Data">
       <div className="bg-gradient-to-b min-h-screen from-white via-[#D3D3D3] to-[#A9A9A9] flex justify-center py-[30px] text-black">
         <div className="w-3/4 flex flex-col items-center gap-10">
             <h1 className="font-bold text-4xl self-start">Optimization Results</h1>
-            <div className="bg-white w-full h-2/3 rounded-xl shadow-[0_4px_4px_0_rgba(0,0,0,0.13)] items-center justify-center flex px-5 py-64 overflow-x-scroll">
+            <div className="bg-white w-full h-2/3 rounded-xl shadow-[0_4px_4px_0_rgba(0,0,0,0.13)] items-center justify-center flex px-5 py-64">
             <div className="text-xl w-32 me-4">
               <p>500 psi</p>
               <p>600 MMCFD</p>
             </div>
-            <div className="relative w-full h-full">
-              <div className="flex items-center justify-center border-black border-2 rounded-full absolute left-0" style={{width: "50px", height: "50px"}}>1</div>
-              <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[50px] top-[25px]" style={{width: "50px"}}></div>
-              <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[100px]" style={{width: "50px", height: "50px"}}>2</div>
-              <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[150px] top-[25px]" style={{width: "355px"}}></div>
-              <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[505px]" style={{width: "50px", height: "50px"}}>3</div>
-              <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[555px] top-[25px]" style={{width: "155px"}}></div>
-              <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[710px]" style={{width: "50px", height: "50px"}}>4</div>
-              <div className="absolute left-[760px] top-[25px]">
-                <div className="absolute top-[40px]">
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute rotate-[30deg] -left-[13px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[80px]" style={{width: "50px", height: "50px"}}>8</div>
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[130px] top-[25px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[230px]" style={{width: "50px", height: "50px"}}>9</div>
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[280px] top-[25px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[380px]" style={{width: "50px", height: "50px"}}>10</div>
+            <div className="relative w-full h-full left-[20%]">
+            <Simulation start={0} end={3} initCompressorBranch={0} initPipeBranch={50} isUp={false} result={result} compressor={compressor} hoverSelectedIndex={hoverSelectedIndex} setHoverSelectedIndex={setHoverSelectedIndex} />
+              <div className="relative top-[25px]" style={{left: `${50 + result.slice(0, 2).map(val => val[2]).reduce((acc, val) => { acc += val; return acc }, 0) + 2 * 50}px`}}>
+                <div className="absolute top-[33px]">
+                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute rotate-[30deg] -left-[13px]" style={{width: `${result[2][2]}px`,}}></div>
+                  <Simulation start={3} end={7} initCompressorBranch={result[2][2] - 20} initPipeBranch={result[2][2] + 30} isUp={false} result={result} compressor={compressor} hoverSelectedIndex={hoverSelectedIndex} setHoverSelectedIndex={setHoverSelectedIndex} />
                 </div>
-                <div className="absolute -top-[40px]">
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute -rotate-[30deg] -left-[13px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[80px] -top-[55px]" style={{width: "50px", height: "50px"}}>5</div>
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[130px] -top-[30px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[230px] -top-[55px]" style={{width: "50px", height: "50px"}}>6</div>
-                  <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute left-[280px] -top-[30px]" style={{width: "100px"}}></div>
-                  <div className="flex items-center justify-center border-black border-2 rounded-full p-3 absolute left-[380px] -top-[55px]" style={{width: "50px", height: "50px"}}>7</div>
+                <div className="absolute -top-[33px]">
+                    <div className="h-[1px] flex items-center justify-center border-black border-[1px] absolute -rotate-[30deg] -left-[13px]" style={{width: `${result[2][2]}px`,}}></div>
+                    <Simulation start={7} end={11} initCompressorBranch={result[2][2] - 20} initPipeBranch={result[2][2] + 30} isUp={true} result={result} compressor={compressor} hoverSelectedIndex={hoverSelectedIndex} setHoverSelectedIndex={setHoverSelectedIndex} />
                 </div>
               </div>
             </div>

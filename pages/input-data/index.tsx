@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import Layout from "@/layouts/layout";
 import { useRouter } from "next/navigation";
@@ -66,7 +67,6 @@ export default function InputData() {
                 <input type="number" placeholder={"Contoh: 5"} className="bg-white border-none outline-none p-4 rounded-xl w-full h-full" onChange={(e) => setData({ ...data!, pipe_initial_pressure: Number(e.target.value) })} />
                 {error && error.pipe_initial_pressure && <p className="text-red-500 font-bold text-sm">{error.pipe_initial_pressure}</p>}
               </div>
-        
             </div>
             <div className="flex items-center justify-center gap-4">
               <div className="flex flex-col gap-2 items-start w-full">
