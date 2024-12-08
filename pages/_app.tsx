@@ -5,7 +5,7 @@ import nProgress from "nprogress";
 import 'nprogress/nprogress.css';
 import { useEffect } from "react";
 
-nProgress.configure({ showSpinner: false });
+nProgress.configure({ showSpinner: true });
 
 export default function App({ Component, pageProps }: AppProps) {
 

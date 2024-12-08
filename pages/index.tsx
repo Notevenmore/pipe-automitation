@@ -16,10 +16,10 @@ export default function Home({}) {
               {"Start Now"}
               <img src="./icons/arrow.svg" />
             </button>
-            <button className="bg-[#EBFDF5] text-[#4f7396] flex justify-evenly items-center w-[171px] h-[52px] rounded-xl font-bold">
-              <p>{"Latest Result"}</p>
-              <p>{">"}</p>
-            </button>
+              {/* <button className="bg-[#EBFDF5] text-[#4f7396] flex justify-evenly items-center w-[171px] h-[52px] rounded-xl font-bold">
+                <p>{"Latest Result"}</p>
+                <p>{">"}</p>
+              </button> */}
           </div>
         </div>
       </div>

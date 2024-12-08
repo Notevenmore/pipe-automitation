@@ -22,10 +22,7 @@ export default function Layout({ children, title }: LayoutProps) {
           </div>
           <ul className="flex flex-row items-center justify-center gap-5">
             <li>
-              <a href="">Community</a>
-            </li>
-            <li>
-              <a href="">About</a>
+              <a href="/about">About</a>
             </li>
           </ul>
         </nav>

@@ -34,16 +34,28 @@ export default function SelectAlgorithm() {
           requested: selectedAlgorithm
         }
 
-        console.log(process.env.BACKEND_URL);
-
-        const response = await api.post('', data, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        localStorage.setItem(selectedAlgorithm, JSON.stringify(response.data));
-        router.push('result');
+        if(selectedAlgorithm !== "All"){
+          const response = await api.post('/api/automated', data, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          console.log(selectedAlgorithm);
+          localStorage.setItem(selectedAlgorithm, JSON.stringify(response.data));
+          router.push('result');
+        } else {
+          const result = await Promise.all(algorithm.map(async (value) => {
+            const dataSend = { ...data, requested: value };
+            const response = await api.post('/automated', dataSend, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+            localStorage.setItem(value, JSON.stringify(response.data));
+            return value;
+          }));
+          if(result) router.push('result');
+        }
       }
     }
   };
