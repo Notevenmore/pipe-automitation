@@ -6,10 +6,10 @@ export default function UpperOrDown({result, compressor, hoverSelectedIndex, set
         {
             isUp && hoverSelectedLengthIndex[7] && <div className="absolute -top-[250px] -left-36 border-black border-2 p-4 rounded-xl w-[500px]">
               <p>Length: {result[7].l} miles</p>
-              <p>Pd:  {result[7].pd} MMCFD</p>
+              <p>Pd:  {result[7].pd} PSI </p>
               <p>Ps:  {result[7].ps} PSI</p>
               <p>d: {result[7].d} cm</p>
-              <p>Flow Rate: {result[7].Q}</p>
+              <p>Flow Rate: {result[7].Q} MMCFD </p>
             </div>
           }
         <div 

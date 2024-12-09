@@ -17,10 +17,10 @@ export default function Simulation ({start, end, initCompressorBranch, initPipeB
               {
                 hoverSelectedLengthIndex[isUp ? i + start + 1 : i + start] && <div className="absolute -top-[250px] -left-36 border-black border-2 p-4 rounded-xl w-[500px]">
                 <p>Length: {result[isUp ? i + start + 1 : i + start].l} miles</p>
-                <p>Pd:  {result[isUp ? i + start + 1 : i + start].pd} MMCFD</p>
+                <p>Pd:  {result[isUp ? i + start + 1 : i + start].pd} PSI</p>
                 <p>Ps:  {result[isUp ? i + start + 1 : i + start].ps} PSI</p>
                 <p>d: {result[isUp ? i + start + 1 : i + start].d} cm</p>
-                <p>Flow Rate: {result[isUp ? i + start + 1 : i + start].Q}</p>
+                <p>Flow Rate: {result[isUp ? i + start + 1 : i + start].Q} MMCFD</p>
               </div>
               }
                 <div 
