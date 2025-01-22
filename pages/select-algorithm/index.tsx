@@ -35,7 +35,7 @@ export default function SelectAlgorithm() {
         }
 
         if(selectedAlgorithm !== "All"){
-          const response = await api.post('/api/automated', data, {
+          const response = await api.post('/gasnet/api/automated', data, {
             headers: {
               'Content-Type': 'application/json',
             }
@@ -46,7 +46,7 @@ export default function SelectAlgorithm() {
         } else {
           const result = await Promise.all(algorithm.map(async (value) => {
             const dataSend = { ...data, requested: value };
-            const response = await api.post('/automated', dataSend, {
+            const response = await api.post('/gasnet/api/automated', dataSend, {
               headers: {
                 'Content-Type': 'application/json'
               }
